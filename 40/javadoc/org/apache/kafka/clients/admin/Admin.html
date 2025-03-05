@@ -95,8 +95,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="AdminClient.html" title="class in org.apache.kafka.clients.admin">AdminClient</a></code>, <code><a href="ForwardingAdmin.html" title="class in org.apache.kafka.clients.admin">ForwardingAdmin</a></code>, <code><a href="KafkaAdminClient.html" title="class in org.apache.kafka.clients.admin">KafkaAdminClient</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="annotations"><a href="../../common/annotation/InterfaceStability.Evolving.html" title="annotation interface in org.apache.kafka.common.annotation">@Evolving</a>
-</span><span class="modifiers">public interface </span><span class="element-name type-name-label">Admin</span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Admin</span><span class="extends-implements">
 extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></span></div>
 <div class="block">The administrative client for Kafka, which supports managing and inspecting topics, brokers, configurations and ACLs.
  <p>
@@ -169,10 +168,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/ja
  <p>
  The minimum broker version required is 0.10.0.0. Methods with stricter requirements will specify the minimum broker
  version required.
- <p>
- This client was introduced in 0.11.0.0 and the API is still evolving. We will try to evolve the API in a compatible
- manner, but we reserve the right to make breaking changes in minor releases, if necessary. We will update the
- <code>InterfaceStability</code> annotation and this notice once the API is considered stable.
  <p></div>
 </section>
 <section class="summary">

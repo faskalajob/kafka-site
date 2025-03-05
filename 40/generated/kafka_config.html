@@ -507,7 +507,7 @@
 </li>
 <li>
 <h4><a id="min.insync.replicas"></a><a id="brokerconfigs_min.insync.replicas" href="#brokerconfigs_min.insync.replicas">min.insync.replicas</a></h4>
-<p>When a producer sets acks to "all" (or "-1"), <code>min.insync.replicas</code> specifies the minimum number of replicas that must acknowledge a write for the write to be considered successful. If this minimum cannot be met, then the producer will raise an exception (either <code>NotEnoughReplicas</code> or <code>NotEnoughReplicasAfterAppend</code>).<br>When used together, <code>min.insync.replicas</code> and acks allow you to enforce greater durability guarantees. A typical scenario would be to create a topic with a replication factor of 3, set <code>min.insync.replicas</code> to 2, and produce with acks of "all". This will ensure that the producer raises an exception if a majority of replicas do not receive a write.</p>
+<p>When a producer sets acks to "all" (or "-1"), this configuration specifies the minimum number of replicas that must acknowledge a write for the write to be considered successful. If this minimum cannot be met, then the producer will raise an exception (either <code>NotEnoughReplicas</code> or <code>NotEnoughReplicasAfterAppend</code>).<br> Regardless of the <code>acks</code> setting, the messages will not be visible to the consumers until they are replicated to all in-sync replicas and the <code>min.insync.replicas</code> condition is met.<br> When used together, <code>min.insync.replicas</code> and <code>acks</code> allow you to enforce greater durability guarantees. A typical scenario would be to create a topic with a replication factor of 3, set <code>min.insync.replicas</code> to 2, and produce with <code>acks</code> of "all". This will ensure that a majority of replicas must persist a write before it's considered successful by the producer and it's visible to consumers.</p>
 <table><tbody>
 <tr><th>Type:</th><td>int</td></tr>
 <tr><th>Default:</th><td>1</td></tr>
@@ -551,7 +551,7 @@
 </li>
 <li>
 <h4><a id="num.replica.alter.log.dirs.threads"></a><a id="brokerconfigs_num.replica.alter.log.dirs.threads" href="#brokerconfigs_num.replica.alter.log.dirs.threads">num.replica.alter.log.dirs.threads</a></h4>
-<p>The number of threads that can move replicas between log directories, which may include disk I/O</p>
+<p>The number of threads that can move replicas between log directories, which may include disk I/O. The default value is equal to the number of directories specified in the <code>log.dir</code> or <code>log.dirs</code> configuration property.</p>
 <table><tbody>
 <tr><th>Type:</th><td>int</td></tr>
 <tr><th>Default:</th><td>null</td></tr>
@@ -1816,7 +1816,7 @@
 </li>
 <li>
 <h4><a id="principal.builder.class"></a><a id="brokerconfigs_principal.builder.class" href="#brokerconfigs_principal.builder.class">principal.builder.class</a></h4>
-<p>The fully qualified name of a class that implements the KafkaPrincipalBuilder interface, which is used to build the KafkaPrincipal object used during authorization. If no principal builder is defined, the default behavior depends on the security protocol in use. For SSL authentication,  the principal will be derived using the rules defined by <code>ssl.principal.mapping.rules</code> applied on the distinguished name from the client certificate if one is provided; otherwise, if client authentication is not required, the principal name will be ANONYMOUS. For SASL authentication, the principal will be derived using the rules defined by <code>sasl.kerberos.principal.to.local.rules</code> if GSSAPI is in use, and the SASL authentication ID for other mechanisms. For PLAINTEXT, the principal will be ANONYMOUS.</p>
+<p>The fully qualified name of a class that implements the KafkaPrincipalBuilder interface, which is used to build the KafkaPrincipal object used during authorization. If no principal builder is defined, the default behavior depends on the security protocol in use. For SSL authentication,  the principal will be derived using the rules defined by <code>ssl.principal.mapping.rules</code> applied on the distinguished name from the client certificate if one is provided; otherwise, if client authentication is not required, the principal name will be ANONYMOUS. For SASL authentication, the principal will be derived using the rules defined by <code>sasl.kerberos.principal.to.local.rules</code> if GSSAPI is in use, and the SASL authentication ID for other mechanisms. For PLAINTEXT, the principal will be ANONYMOUS. Note that custom implementations of <code>KafkaPrincipalBuilder</code> is required to implement <code>KafkaPrincipalSerde</code> interface, otherwise brokers will not be able to forward requests to the controller.</p>
 <table><tbody>
 <tr><th>Type:</th><td>class</td></tr>
 <tr><th>Default:</th><td>org.apache.kafka.common.security.authenticator.DefaultKafkaPrincipalBuilder</td></tr>
@@ -2619,7 +2619,7 @@
 </li>
 <li>
 <h4><a id="alter.config.policy.class.name"></a><a id="brokerconfigs_alter.config.policy.class.name" href="#brokerconfigs_alter.config.policy.class.name">alter.config.policy.class.name</a></h4>
-<p>The alter configs policy class that should be used for validation. The class should implement the <code>org.apache.kafka.server.policy.AlterConfigPolicy</code> interface.</p>
+<p>The alter configs policy class that should be used for validation. The class should implement the <code>org.apache.kafka.server.policy.AlterConfigPolicy</code> interface. <p>Note: This policy runs on the controller instead of the broker.</p></p>
 <table><tbody>
 <tr><th>Type:</th><td>class</td></tr>
 <tr><th>Default:</th><td>null</td></tr>
@@ -2718,7 +2718,7 @@
 </li>
 <li>
 <h4><a id="create.topic.policy.class.name"></a><a id="brokerconfigs_create.topic.policy.class.name" href="#brokerconfigs_create.topic.policy.class.name">create.topic.policy.class.name</a></h4>
-<p>The create topic policy class that should be used for validation. The class should implement the <code>org.apache.kafka.server.policy.CreateTopicPolicy</code> interface.</p>
+<p>The create topic policy class that should be used for validation. The class should implement the <code>org.apache.kafka.server.policy.CreateTopicPolicy</code> interface. <p>Note: This policy runs on the controller instead of the broker.</p></p>
 <table><tbody>
 <tr><th>Type:</th><td>class</td></tr>
 <tr><th>Default:</th><td>null</td></tr>
