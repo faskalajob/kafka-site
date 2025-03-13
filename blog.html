@@ -35,10 +35,6 @@
                     For a full list of changes, be sure to check the <a href="https://archive.apache.org/dist/kafka/4.0.0/RELEASE_NOTES.html">release notes</a>. 
                 </p>
                 <p>
-                    See the <a href="https://kafka.apache.org/documentation.html#upgrade_4_0_0">Upgrading to 4.0 from any versions 0.8.x through 3.9.x</a> section in the
-                    documentation for the list of notable changes and detailed upgrade steps.
-                </p>
-                <p>
                     Apache Kafka 4.0 is a significant milestone, marking the first major release to operate entirely
                     without Apache ZooKeeper&#174;. By running in KRaft mode by default, Kafka simplifies
                     deployment and management, eliminating the complexity of maintaining a separate ZooKeeper
@@ -62,8 +58,19 @@
                     use cases, particularly those requiring point-to-point messaging patterns.
                 </p>
                 <p>
+                    Kafka's major releases, such as version 4.0, remove APIs deprecated for at least 12 months to simplify the platform 
+                    and encourage the adoption of newer features. Notably, in Kafka 4.0, Kafka Clients and Kafka Streams require Java 11, 
+                    while Kafka Brokers, Connect, and Tools now require Java 17. This release also updated the minimum supported client 
+                    and broker versions (<a href="https://cwiki.apache.org/confluence/x/K5sODg">KIP-896</a>) and defined new baseline 
+                    requirements for supported upgrade paths. Further details are provided in subsequent sections of this document. 
+                </p>
+                <p>
                     These highlights illustrate Kafka's continued evolution to meet the demands of modern,
                     scalable, and efficient data streaming and messaging architectures.
+                </p>
+                <p>
+                    See the <a href="https://kafka.apache.org/documentation.html#upgrade_4_0_0">Upgrading to 4.0</a> section in the
+                    documentation for the list of notable changes and detailed upgrade steps.
                 </p>
                 
                 <h3>Kafka Broker, Controller, Producer, Consumer and Admin Client</h3>
@@ -110,27 +117,22 @@
                         this approach minimizes disruptions caused by network partitions or transient issues.
                     </li>
                     <li>
-                        <a href="https://cwiki.apache.org/confluence/x/joqzDw">KIP-950: Tiered Storage Disablement</a>
-                        <br>
-                        This feature will allow customers to selectively disable Tiered Storage on a per-topic basis.
-                    </li>
-                    <li>
                         <a href="https://cwiki.apache.org/confluence/x/XA-OEg">KIP-1076: Metrics for client applications KIP-714 extension</a>
                         <br>
-                        With KIP-714, cluster operators can now collect client metrics directly from brokers using a plugin.
-                        This makes it much easier to monitor client behavior. However, KIP-714 only gathers metrics from
-                        Kafka clients (admin, consumer, and producer) and doesn't cover application-level metrics for
-                        embedded clients, such as Kafka Streams. To fully understand performance, it's important to collect
-                        both client metrics and application-specific metrics. This KIP introduces a way for applications that
-                        use Kafka clients to include their own metrics alongside the existing client metrics.
+                        With <a href="https://cwiki.apache.org/confluence/x/XA-OEg">KIP-714</a>, cluster operators can now collect 
+                        client metrics directly from brokers using a plugin. This makes it much easier to monitor client behavior. 
+                        However, KIP-714 only gathers metrics from Kafka clients (admin, consumer, and producer) and doesn't cover 
+                        application-level metrics for embedded clients, such as Kafka Streams. To fully understand performance, 
+                        it's important to collect both client metrics and application-specific metrics. This KIP introduces a way 
+                        for applications that use Kafka clients to include their own metrics alongside the existing client metrics.
                     </li>
                     <li>
                         <a href="https://cwiki.apache.org/confluence/x/NIyMEw">KIP-1106: Add duration based offset reset option for consumer clients</a>
                         <br>
-                        Kafka consumer supports auto.offset.reset config option, which is used when there is no initial
+                        Kafka consumer supports <code>auto.offset.reset</code> config option, which is used when there is no initial
                         offset in Kafka or if the current offset does not exist any more on the server. This config currently
                         supports earliest/latest/none options. Currently consumer resets might force applications to
-                        reprocess large amounts of data from earlier offsets. With infinite storage, its beneficial to have a
+                        reprocess large amounts of data from earlier offsets. With infinite storage, it's beneficial to have a
                         duration based offset reset strategy. This KIP allows applications to consume/initialise from a fixed
                         duration when there is no initial offset in Kafka.
                     </li>
@@ -139,15 +141,15 @@
                         <br>
                         KIP-848 and KIP-932 introduce new group types, consumer and share respectively. The Admin Client
                         API has limitations when dealing with newer group types, sometimes returning errors or incorrectly
-                        stating that groups don't exist. To address this challenge a new command-line tool, kafka-groups.sh,
-                        and updates to existing command line tools, kafka-consumer-groups.sh and kafka-share-groups.sh,
+                        stating that groups don't exist. To address this challenge, a new command-line tool, kafka-groups.sh,
+                        and updates to existing command line tools, <code>kafka-consumer-groups.sh</code> and kafka-share-groups.sh,
                         were made in Kafka 4.0 to enable users to view all groups in a cluster, along with their types and
                         protocols, providing accurate information even when the Admin Client API fails.
                     </li>
                     <li>
                         <a href="https://cwiki.apache.org/confluence/x/w4mMEw">KIP-1099: Extend kafka-consumer-groups command line tool to support new consumer group</a>
                         <br>
-                        This KIP extends the kafka-consumer-groups and the kafka-share-groups command line tools to
+                        This KIP extends the <code>kafka-consumer-groups.sh</code> and the <code>kafka-share-groups.sh</code> command line tools to
                         provide more information related to consumer and share groups. This helps when it comes to
                         troubleshooting consumer and share groups, respectively introduced by KIP-848 and KIP-932.
                     </li>
@@ -163,21 +165,23 @@
                         <a href="https://cwiki.apache.org/confluence/x/K5sODg">KIP-896: Remove old client protocol API versions in Kafka 4.0</a>
                         <br>
                         For the first time, old protocol API versions have been removed. Users should ensure brokers are
-                        version 2.1 or higher before upgrading Java clients (including Connect and Streams to 4.0. Similarly,
+                        version 2.1 or higher before upgrading Java clients (including Connect and Streams to 4.0). Similarly,
                         users should ensure their Java clients version is 2.1 or higher before upgrading brokers to 4.0.
                     </li>
                     <li>
                         <a href="https://cwiki.apache.org/confluence/x/y4kgF">KIP-1124: Providing a clear Kafka Client upgrade path for 4.x</a>
                         <br>
-                        This KIP outlines the upgrade patch for Kafka Clients, Streams and Connect to 4.0. It is a must read
+                        This KIP outlines the upgrade path for Kafka Clients, Streams and Connect to 4.0. It is a must read
                         before upgrading your clusters and clients.
                     </li>
                     <li>
                         <a href="https://cwiki.apache.org/confluence/x/GCx4CQ">KIP-653: Upgrade log4j to log4j2</a>
                         <br>
                         The logging framework has been migrated from Log4j to Log4j2. Users can use the
-                        log4j-transform-cli tool to automatically convert their existing Log4j configuration files to Log4j2
-                        format.
+                        <a href="https://logging.staged.apache.org/log4j/transform/cli.html">log4j-transform-cli</a> tool to 
+                        automatically convert their existing Log4j configuration files to Log4j2 format. Users can also keep 
+                        using their Log4j configurations, but with certain limitations. Check the 
+                        <a href="https://logging.apache.org/log4j/2.x/migrate-from-log4j1.html#limitations-of-the-log4j-1-x-bridge">migration guide</a> for details.
                     </li>
                     <li>
                         <a href="https://cwiki.apache.org/confluence/x/RomNCg">KIP-724: Drop support for message formats v0 and v1</a>
@@ -188,7 +192,7 @@
                         <a href="https://cwiki.apache.org/confluence/x/P4vOCg">KIP-750: Drop support for Java 8 in Kafka 4.0 (deprecate in 3.0)</a> &
                         <a href="https://cwiki.apache.org/confluence/x/Bov5E">KIP-1013: Drop broker and tools support for Java 11 in Kafka 4.0 (deprecate in 3.7)</a>
                         <br>
-                        Kafka Clients and Kafka Streams require Java 11 while Kafka Brokers, Connect and Tools now requires Java 17.
+                        Kafka Clients and Kafka Streams require Java 11 while Kafka Brokers, Connect and Tools now require Java 17.
                     </li>
                     <li>
                         <a href="https://cwiki.apache.org/confluence/x/FAqpEQ">KIP-1030: Change constraints and default values for various configurations</a>
@@ -213,7 +217,7 @@
                         <a href="https://cwiki.apache.org/confluence/x/TZCMEw">KIP-1112: allow custom processor wrapping</a>
                         <br>
                         KIP-1112 simplifies applying cross-cutting logic in Kafka Streams by introducing the
-                        ProcessorWrapper interface, enabling seamless injection of custom logic around Processor API
+                        <code>ProcessorWrapper</code> interface, enabling seamless injection of custom logic around Processor API
                         and DSL processors. This eliminates previous redundancy and reduces the maintenance
                         overhead caused by manually integrating logic into each processor individually.
                     </li>
@@ -221,7 +225,7 @@
                         <a href="https://cwiki.apache.org/confluence/x/LQ6TEg">KIP-1065: Add "retry" return-option to ProductionExceptionHandler</a>
                         <br>
                         KIP-1065 addresses persistent errors in Kafka Streams by allowing users to break retry loops
-                        via a new "RETRY" option in the ProductionExceptionHandler. This enhancement provides
+                        via a new "RETRY" option in the <code>ProductionExceptionHandler</code>. This enhancement provides
                         customizable error handling, enabling retries, graceful failures, or dropping problematic records
                         to continue processing efficiently.
                     </li>
@@ -242,24 +246,31 @@
                         <br>
                         The endpoint <code>GET /connectors/{connector}/tasks-config</code> added in KIP-661 was deprecated in
                         Apache Kafka 3.7 and is finally removed in 4.0. The endpoint
-                        </code>GET /connectors/{connector}/tasks</code> must be used as a replacement.
+                        <code>GET /connectors/{connector}/tasks</code> must be used as a replacement.
                     </li>
                     <li>
                         <a href="https://cwiki.apache.org/confluence/x/jA3OEg">KIP-1074: Allow the replication of user internal topics</a>
                         <br>
-                        Currently, Mirror Maker 2 automatically excludes topics ending in ".internal" or "-internal", 
-                        mistakenly identifying them as internal topics and preventing replication of legitimate business
-                        topics unless a custom replication policy is implemented. This KIP introduces configurable
-                        behavior, allowing users to replicate these topics without needing custom code.
+                        Previously, Mirror Maker 2 automatically excluded topics whose names ended with .internal or -internal, incorrectly classifying them 
+                        as internal topics. This behavior prevented legitimate business topics from being replicated unless users implemented a custom 
+                        replication policy. This KIP introduced a configurable option that allowed users to replicate such topics without requiring custom code.
                     </li>
                     <li>
                         <a href="https://cwiki.apache.org/confluence/x/UwotEw">KIP-1089: Allow disabling heartbeats replication in MirrorSourceConnector</a>
                         <br>
-                        Currently, MirrorSourceConnector always replicates heartbeat topics, which can cause issues
-                        when multiple connectors with different configurations replicate topics between the same
-                        clusters, resulting in duplicate heartbeat replication. This KIP introduces a configurable option to
-                        disable heartbeat topic replication, allowing users greater flexibility, especially when using
-                        multiple connectors with distinct configurations.
+                        Previously, MirrorSourceConnector always replicated heartbeat topics, which could cause issues 
+                        when multiple connectors with different configurations replicated topics between the same clusters, 
+                        resulting in duplicate heartbeat replication. This KIP introduced a configurable option to disable 
+                        heartbeat topic replication, providing users greater flexibility, particularly when using multiple 
+                        connectors with distinct configurations.
+                    </li>
+                    <li>
+                        <a href="https://cwiki.apache.org/confluence/x/uwrPEQ">KIP-1032: Upgrade to Jakarta and JavaEE 10 in Kafka 4.0</a>
+                        <br>
+                        Kafka Connect previously utilized outdated JavaEE APIs, restricting its compatibility with contemporary Jakarta EE 
+                        frameworks and applications. KIP-1032 addressed this by upgrading Kafka 4.0 to Jakarta EE and JavaEE 10 APIs, 
+                        introducing Java 17 as a required minimum version, and aligning Kafka with current standards for improved 
+                        maintainability.
                     </li>
                 </ul>
                 
